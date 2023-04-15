@@ -23,16 +23,16 @@ public class Cometition {
     private WebElement jobType;
 
     @FindBy(css = "#app div.v-application--wrap div.compitition-page-content div:nth-of-type(1) div:nth-of-type(3) div div.accordion-panel div.panel-content div.content div div:nth-of-type(1) div.accordion-panel header.panel-header a.panel-header-icon")
-    private WebElement arrowdropup3;
+    private WebElement drivertype;
 
     @FindBy(css = "#app div.v-application--wrap div.compitition-page-content div:nth-of-type(1) div:nth-of-type(3) div div.accordion-panel div.panel-content div.content div div:nth-of-type(2) div.accordion-panel.not-expanded header.panel-header a.panel-header-icon")
-    private WebElement arrowdropup4;
+    private WebElement  teamPosition;
 
     @FindBy(css = "#app div.v-application--wrap div.compitition-page-content div:nth-of-type(1) div:nth-of-type(3) div div.accordion-panel div.panel-content div.content div div:nth-of-type(3) div.accordion-panel.not-expanded header.panel-header a.panel-header-icon")
-    private WebElement arrowdropup5;
+    private WebElement routeType;
 
     @FindBy(css = "#app div.v-application--wrap div.compitition-page-content div:nth-of-type(1) div:nth-of-type(3) div div.accordion-panel div.panel-content div.content div div:nth-of-type(4) div.accordion-panel.not-expanded header.panel-header a.panel-header-icon")
-    private WebElement arrowdropup6;
+    private WebElement haulType;
 
     @FindBy(id = "Job Postings")
     private WebElement articlejobPostings1;
@@ -279,7 +279,7 @@ public class Cometition {
     @FindBy(name = "radio-253")
     private List<WebElement> soloOrTeamPositionincludeexcludearrowdropupsoloradiobuttonuncheckedradiobuttonuncheckedteamAnyradiobuttonuncheckedradiobuttonuncheckedteam8;
 
-    private final String soloOrTeamPositionincludeexcludearrowdropupsoloradiobuttonuncheckedradiobuttonuncheckedteamAnyradiobuttonuncheckedradiobuttonuncheckedteamValue = "true";
+    private final String soloOrTeamPositionincludeexcludearrowdropupsoloradiobuttonuncheckedradiobuttonuncheckedteamAnyradiobuttonuncheckedradiobuttonuncheckedteamValue1 = "true";
 
     private final String soloOrTeamPositionincludeexcludearrowdropupsoloradiobuttonuncheckedradiobuttonuncheckedteamAnyradiobuttonuncheckedradiobuttonuncheckedteamValue = "false";
 
@@ -378,8 +378,8 @@ public class Cometition {
      *
      * @return the Cometition class instance.
      */
-    public Cometition clickArrowdropup3Link() {
-        arrowdropup3.click();
+    public Cometition clickdrivertypedropupLink() {
+    	drivertype.click();
         return this;
     }
 
@@ -388,8 +388,8 @@ public class Cometition {
      *
      * @return the Cometition class instance.
      */
-    public Cometition clickArrowdropup4Link() {
-        arrowdropup4.click();
+    public Cometition clickteamPositiondropupLink() {
+    	teamPosition.click();
         return this;
     }
 
@@ -398,8 +398,8 @@ public class Cometition {
      *
      * @return the Cometition class instance.
      */
-    public Cometition clickArrowdropup5Link() {
-        arrowdropup5.click();
+    public Cometition clickrouteTypeLink() {
+    	routeType.click();
         return this;
     }
 
@@ -408,8 +408,8 @@ public class Cometition {
      *
      * @return the Cometition class instance.
      */
-    public Cometition clickArrowdropup6Link() {
-        arrowdropup6.click();
+    public Cometition clickhaulTypeLink() {
+    	haulType.click();
         return this;
     }
 
