@@ -1,4 +1,4 @@
-package com.katampu22a.utility;
+package com.strategizeqa.utility;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
