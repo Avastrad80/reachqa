@@ -9,6 +9,12 @@ public class Locations {
 	private Map<String, String> data;
     private WebDriver driver;
     private int timeout = 15;
+    
+	@FindBy(xpath = "//div[@class='md-theme-light']//child::a[2]")
+	private WebElement locations;
+	
+	
+    
 
     @FindBy(css = "#app div.v-application--wrap div.locations-grid div:nth-of-type(2) div:nth-of-type(2) div:nth-of-type(1) div.accordion-panel header.panel-header a.panel-header-icon")
     private WebElement locationOverView;
@@ -26,15 +32,13 @@ public class Locations {
     private WebElement clear;
 
 
-    @FindBy(css = "a.mapbox-improve-map")
-    private WebElement improveThisMap;
+
 
     @FindBy(id = "input-137")
     private WebElement location;
 
-    @FindBy(id = "locations")
-    private WebElement locations;
-
+    @FindBy(css = "a.mapbox-improve-map")
+    private WebElement improveThisMap;
 
     @FindBy(css = "a[title='OpenStreetMap']")
     private WebElement openstreetmap;

@@ -1,10 +1,14 @@
 package com.strategizeqa.pages;
 
+import java.util.List;
 import java.util.Map;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.Select;
 
 import com.strategizeqa.Keyword;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -13,13 +17,13 @@ public class MarketTrends {
 	private WebDriver driver;
 	private int timeout = 15;
 	
-	@FindBy(css = "#market")
+	@FindBy(xpath = "//div[@class='md-theme-light']//child::a[1]")
 	private WebElement marketTrends;
 
-	@FindBy(css = "#locations")
+	@FindBy(xpath = "//div[@class='md-theme-light']//child::a[2]")
 	private WebElement locations;
 
-	@FindBy(css = "#competition")
+	@FindBy(xpath = "//div[@class='md-theme-light']//child::a[3]")
 	private WebElement competition;
 
 	@FindBy(css = "a#help > i.md-icon")
@@ -31,16 +35,19 @@ public class MarketTrends {
 	@FindBy(css = "div.md-button-content > span:last-of-type")
 	private WebElement logout;
 
-	@FindBy(css = "#driver-type-select")
+	@FindBy(xpath = "//div[contains(@class,'driver-type')]")
 	private WebElement driverType;
 
+	@FindBy(xpath = "//div[text()='Company Driver']")
+	private WebElement companyDriver;
+	
 	@FindBy(css = "#input-81")
 	private WebElement timeframe;
 
 	@FindBy(css = "button.green-button")
 	private WebElement runSearch;
 
-	@FindBy(xpath = "//div[contains(text(),'Prior 3 months')]")
+	@FindBy(css = "div#list-item-360.v-list-item.selectedOption > div.v-list-item__title")
 	private WebElement prior3months;
 
 	@FindBy(xpath = "//div[contains(text(),'Prior 6 months')]")
@@ -68,6 +75,7 @@ public class MarketTrends {
 	private WebElement keyboardarrowright;
 
 	public MarketTrends() {
+		PageFactory.initElements(Keyword.driver, this);
 	}
 
 	public MarketTrends(WebDriver driver) {
@@ -85,132 +93,75 @@ public class MarketTrends {
 		this.timeout = timeout;
 	}
 	
-
-
-	/**
-	 * Click on Competition Link.
-	 *
-	 * @return the MarketTrends class instance.
-	 */
+	public MarketTrends clickLocationLink() {
+		locations.click();
+		return this;
+		
+	}
+	
 	public MarketTrends clickCompetitionLink() {
 		competition.click();
 		return this;
 	}
 
-	/**
-	 * Click on Help Icon Link.
-	 *
-	 * @return the MarketTrends class instance.
-	 */
 	public MarketTrends clickHelpIconLink() {
 		helpIcon.click();
 		return this;
 	}
 
-	/**
-	 * Click on Keyboardarrowleft Button.
-	 *
-	 * @return the MarketTrends class instance.
-	 */
-	public MarketTrends clickKeyboardarrowleftButton() {
-		keyboardarrowleft.click();
-		return this;
-	}
-
-	/**
-	 * Click on Keyboardarrowright Button.
-	 *
-	 * @return the MarketTrends class instance.
-	 */
-	public MarketTrends clickKeyboardarrowrightButton() {
-		keyboardarrowright.click();
-		return this;
-	}
-
-	/**
-	 * Click on Locations Link.
-	 *
-	 * @return the MarketTrends class instance.
-	 */
-	public MarketTrends clickLocationsLink() {
-		locations.click();
-		return this;
-	}
-
-	/**
-	 * Click on Market Trends Link.
-	 *
-	 * @return the MarketTrends class instance.
-	 */
 	public MarketTrends clickMarketTrendsLink() {
 		marketTrends.click();
 		return this;
 	}
+	
+	public MarketTrends clickCompanyDriverlink() {
+		companyDriver.click();
+		return this; 
+	}
+	
+	public MarketTrends clickDriverType() {
+		Keyword.wait(2000);
+		driverType.click();
+		return this;
+	}
+	
+	public void selectDropdownOptionByIndex(int index) {
+	    Select select = new Select(driverType);
+	    select.selectByIndex(index);
+	}
 
-	/**
-	 * Click on Run Search Button.
-	 *
-	 * @return the MarketTrends class instance.
-	 */
+	
+	public String getSelectedDropdownValue() {
+	    Select select = new Select(driverType);
+	    return select.getFirstSelectedOption().getText();
+	}
+	
+	public void selectDropdownOptionByVisibleText(String visibleText) {
+	    Select select = new Select(driverType);
+	    select.selectByVisibleText(visibleText);
+	}
+	
+
+	public MarketTrends click3months() {
+		prior3months.click();
+		return this;
+	}
+	
+	public MarketTrends click6months() {
+		prior6months.click();
+		return this;
+	}
+	
+	public MarketTrends click12months() {
+		prior12months.click();
+		return this;
+	}
+
 	public MarketTrends clickRunSearchButton() {
 		runSearch.click();
 		return this;
 	}
-
-	/**
-	 * Fill every fields in the page.
-	 *
-	 * @return the MarketTrends class instance.
-	 */
-	public MarketTrends fill() {
-		setDriverTypeTextField();
-		setTimeframeTextField();
-		return this;
-	}
-
-	/**
-	 * Set default value to Driver Type Text field.
-	 *
-	 * @return the MarketTrends class instance.
-	 */
-	public MarketTrends setDriverTypeTextField() {
-		return setDriverTypeTextField(data.get("DRIVER_TYPE"));
-	}
-
-	/**
-	 * Set value to Driver Type Text field.
-	 *
-	 * @return the MarketTrends class instance.
-	 */
-	public MarketTrends setDriverTypeTextField(String driverTypeValue) {
-		driverType.sendKeys(driverTypeValue);
-		return this;
-	}
-
-	/**
-	 * Set default value to Timeframe Text field.
-	 *
-	 * @return the MarketTrends class instance.
-	 */
-	public MarketTrends setTimeframeTextField() {
-		return setTimeframeTextField(data.get("TIMEFRAME"));
-	}
-
-	/**
-	 * Set value to Timeframe Text field.
-	 *
-	 * @return the MarketTrends class instance.
-	 */
-	public MarketTrends setTimeframeTextField(String timeframeValue) {
-		timeframe.sendKeys(timeframeValue);
-		return this;
-	}
-
-	/**
-	 * Verify that current page URL matches the expected URL.
-	 *
-	 * @return the MarketTrends class instance.
-	 */
+	
 	public MarketTrends verifyPageUrl() {
 		Keyword.getPageTitle();
 		return this;

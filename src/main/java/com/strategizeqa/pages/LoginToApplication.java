@@ -5,6 +5,9 @@ import java.util.Map;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+
+import com.strategizeqa.Keyword;
 
 public class LoginToApplication {
 	
@@ -12,23 +15,23 @@ public class LoginToApplication {
     private WebDriver driver;
     private int timeout = 15;
 
-	@FindBy(css = ".btnGreen")
-	private WebElement contiune;
+	@FindBy(xpath = "//button[@value='continue']")
+	private WebElement contiuneBtn;
 
     @FindBy(xpath = "//a[contains(text(),'Forgot Password?')]")
     private WebElement forgotPassword;
     
-	@FindBy(css = "#Username")
+	@FindBy(xpath = "//input[@type='email']")
     private WebElement logInToYourAccount;
 	
-	@FindBy(css = "#Password")
-	private WebElement password;
+	@FindBy(xpath = "//input[@type='password']")
+	private WebElement enterPassword;
 
-	@FindBy(css = "#loginButton")
-    private WebElement login;
-
+	@FindBy(xpath = "//button[@value='login']")
+    private WebElement loginBtn;
 
     public LoginToApplication() {
+    	PageFactory.initElements(Keyword.driver, this);
     }
 
     public LoginToApplication(WebDriver driver) {
@@ -46,23 +49,23 @@ public class LoginToApplication {
         this.timeout = timeout;
     }
     
-	public LoginToApplication enterUserName() {
-		logInToYourAccount.sendKeys("arun@webmatrixcorp.com");
+	public LoginToApplication enterUserName(String userName) {
+		logInToYourAccount.sendKeys(userName);
 		return this;
 	}
 	
 	public LoginToApplication clickContiune() {
-		contiune.click();
+		contiuneBtn.click();
 		return this;
 	}
 	
-	public LoginToApplication enterPassword() {
-		password.sendKeys("Password@2023");
+	public LoginToApplication enterPassword(String password) {
+		enterPassword.sendKeys(password);
 		return this;
 	}
 	
-	public LoginToApplication login() {
-		login.click();
+	public LoginToApplication loginBtn() {
+		loginBtn.click();
 		return this;
 	}
 
@@ -70,26 +73,6 @@ public class LoginToApplication {
         forgotPassword.click();
         return this;
     }
-
-
-   // public LoginToApplication fill() {
-    //    setLogInToYourAccountEmailField();
-     //   return this;
-   // }
-
-
-//    public LoginToApplication setLogInToYourAccountEmailField() {
-    //    return setLogInToYourAccountEmailField(data.get("LOG_IN_TO_YOUR_ACCOUNT"));
-  //  }
-
-
-	/*
-	 * public LoginToApplication setLogInToYourAccountEmailField(String
-	 * logInToYourAccountValue) {
-	 * logInToYourAccount.sendKeys(logInToYourAccountValue); return this; }
-	 */
-
-
 
 
 }

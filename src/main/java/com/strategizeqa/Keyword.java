@@ -87,6 +87,14 @@ public class Keyword {
 		wait.until(ExpectedConditions.elementToBeSelected(element));
 
 	}
+	
+	public static void wait(int milliseconds) {
+	    try {
+	        Thread.sleep(milliseconds);
+	    } catch (InterruptedException e) {
+	        e.printStackTrace();
+	    }
+	}
 
 	// To click on web element
 	public static void clickOn(String locatorType, String locatorValue) {
@@ -104,7 +112,7 @@ public class Keyword {
 	public static WebElement getWebElement(String locatorType, String locatorValue) {
 		if (locatorType.equalsIgnoreCase("id")) {
 			return driver.findElement(By.id(locatorValue));
-		} else if (locatorType.equalsIgnoreCase("Css")) {
+		} else if (locatorType.equalsIgnoreCase("css")) {
 			return driver.findElement(By.cssSelector(locatorValue));
 		} else if (locatorType.equalsIgnoreCase(xpath)) {
 			return driver.findElement(By.xpath(locatorValue));
