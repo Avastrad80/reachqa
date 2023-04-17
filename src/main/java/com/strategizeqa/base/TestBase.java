@@ -1,6 +1,7 @@
 package com.strategizeqa.base;
 
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeMethod;
@@ -18,6 +19,8 @@ public class TestBase {
 		Config conf = new Config();
 		System.out.println("Launching url: "+conf.getAppUrl());
 		Keyword.launchUrl(conf.getAppUrl());
+		
+		
 	}
 	
 	@AfterClass

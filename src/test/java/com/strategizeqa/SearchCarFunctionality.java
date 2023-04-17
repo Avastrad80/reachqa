@@ -1,4 +1,4 @@
-package com.katampu22a;
+package com.strategizeqa;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;

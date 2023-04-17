@@ -1,4 +1,4 @@
-package com.katampu22a;
+package com.strategizeqa;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -21,15 +21,17 @@ import org.testng.Assert;
 
 public class Keyword {
 
-	private static String xpath="xpath";
-	private static String linkText ="linkText";
-	private static String className="className";
+	private static String xpath = "xpath";
+	private static String linkText = "linkText";
+	private static String className = "className";
+
 	private Keyword() {
 		throw new IllegalStateException("Utility class");
 	}
 
 	// This field is not final because it needs to be initialized at runtime.
-    // Modifying its value directly can cause unexpected behavior and should be avoided.
+	// Modifying its value directly can cause unexpected behavior and should be
+	// avoided.
 	public static RemoteWebDriver driver = null;
 
 	/**
@@ -45,7 +47,6 @@ public class Keyword {
 			ChromeOptions option = new ChromeOptions();
 			option.addArguments("--disable-notifications");
 			option.setExperimentalOption("excludeSwitches", new String[] { "enable-automation", "disable-infobars" });
-
 			driver = new ChromeDriver(option);
 		} else if (browserName.equalsIgnoreCase("FireFox")) {
 			driver = new FirefoxDriver();
@@ -54,54 +55,68 @@ public class Keyword {
 		} else if (browserName.isEmpty()) {
 			driver = new ChromeDriver();
 		}
-
 		driver.manage().window().maximize();
 	}
 
+	// Launch URL
 	public static void launchUrl(String url) {
 		driver.get(url);
 	}
 
+	// Get Page Title
 	public static String getPageTitle() {
 		return driver.getTitle();
 	}
 
+	// Scroll Window
 	public static void scrollWindow(int x, int y) {
 		driver.executeScript("window.scrollBy(arguments[0], arguments[1])", x, y);
 		// driver.executeScript("window.scrollBy("+x+","+y+")"); // String Concatenation
 	}
 
+	// Fluent Wait
 	public static void waitForvisibilityOfElementLocated(By element) {
 		// Applied Fluent Wait
 		FluentWait<WebDriver> wait = new FluentWait<>(driver);
 		wait.withTimeout(Duration.ofSeconds(60));
 		wait.pollingEvery(Duration.ofMillis(500));
 		wait.ignoring(NoSuchElementException.class);
-
 		// Wait Till the expected condition is present on the DOM
 		wait.until(ExpectedConditions.visibilityOfElementLocated(element));
 		wait.until(ExpectedConditions.presenceOfElementLocated(element));
+		wait.until(ExpectedConditions.elementToBeSelected(element));
 
 	}
+	
+	public static void wait(int milliseconds) {
+	    try {
+	        Thread.sleep(milliseconds);
+	    } catch (InterruptedException e) {
+	        e.printStackTrace();
+	    }
+	}
 
+	// To click on web element
 	public static void clickOn(String locatorType, String locatorValue) {
 
 		getWebElement(locatorType, locatorValue);
 	}
 
+	// Press Enter Key
 	public static void pressEnterKey() {
 		Actions action = new Actions(driver);
 		action.sendKeys(Keys.ENTER).build().perform();
 	}
-	
+
+	// Get element using locators
 	public static WebElement getWebElement(String locatorType, String locatorValue) {
 		if (locatorType.equalsIgnoreCase("id")) {
 			return driver.findElement(By.id(locatorValue));
-		} else if (locatorType.equalsIgnoreCase("Css")) {
+		} else if (locatorType.equalsIgnoreCase("css")) {
 			return driver.findElement(By.cssSelector(locatorValue));
 		} else if (locatorType.equalsIgnoreCase(xpath)) {
 			return driver.findElement(By.xpath(locatorValue));
-		} else if (locatorType.equalsIgnoreCase(linkText )) {
+		} else if (locatorType.equalsIgnoreCase(linkText)) {
 			return driver.findElement(By.linkText(locatorValue));
 		} else if (locatorType.equalsIgnoreCase(className)) {
 			return driver.findElement(By.className(locatorValue));
@@ -113,10 +128,12 @@ public class Keyword {
 		}
 	}
 
+	// Close Browser
 	public static void closeBrowser() {
 		driver.close();
 	}
 
+	// Enter Text
 	public static void enterText(String locatorType, String locatorValue, String textToEnter) {
 		WebElement element = getWebElement(locatorType, locatorValue);
 		try {
@@ -126,6 +143,7 @@ public class Keyword {
 		}
 	}
 
+	// Get List of Texts using locator
 	public static List<String> getListOfTexts(String locatorType, String locatorValue) {
 		List<String> textList = new ArrayList<>();
 		List<WebElement> list = null;
@@ -150,6 +168,7 @@ public class Keyword {
 
 	}
 
+	// Find list of elemetn using locator
 	public static List<WebElement> findElements(String locatorType, String locatorValue) {
 		if (locatorType.equalsIgnoreCase("id")) {
 			return driver.findElements(By.id(locatorValue));
@@ -157,7 +176,7 @@ public class Keyword {
 			return driver.findElements(By.cssSelector(locatorValue));
 		} else if (locatorType.equalsIgnoreCase(xpath)) {
 			return driver.findElements(By.xpath(locatorValue));
-		} else if (locatorType.equalsIgnoreCase(linkText )) {
+		} else if (locatorType.equalsIgnoreCase(linkText)) {
 			return driver.findElements(By.linkText(locatorValue));
 		} else if (locatorType.equalsIgnoreCase(className)) {
 			return driver.findElements(By.className(locatorValue));
@@ -168,7 +187,7 @@ public class Keyword {
 		}
 	}
 
-
+	// Get web elements
 	public static List<WebElement> getWebElements(String locatorType, String locatorValue) {
 		if (locatorType.equalsIgnoreCase("id")) {
 			return driver.findElements(By.id(locatorValue));
@@ -212,12 +231,18 @@ public class Keyword {
 
 	public static void clickOn(By by) {
 		driver.findElement(by).click();
-		
+
 	}
 
 	public static void assertPageTitle(String expectedTitle) {
 		String actual = getPageTitle();
 		Assert.assertEquals(actual, expectedTitle);
 	}
+
+	public static Object getDriver() {
+		return null;
+	}
+
+
 
 }
