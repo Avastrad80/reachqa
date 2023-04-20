@@ -16,19 +16,19 @@ public class Locations {
 	
     
 
-    @FindBy(css = "#app div.v-application--wrap div.locations-grid div:nth-of-type(2) div:nth-of-type(2) div:nth-of-type(1) div.accordion-panel header.panel-header a.panel-header-icon")
+    @FindBy(xpath = "//h1[normalize-space()='Location Overview']")
     private WebElement locationOverView;
 
-    @FindBy(css = "#app div.v-application--wrap div.locations-grid div:nth-of-type(2) div:nth-of-type(2) div:nth-of-type(2) div.accordion-panel header.panel-header a.panel-header-icon")
+    @FindBy(xpath = "//h1[normalize-space()='Driver Population Stats']")
     private WebElement driverPopulationStats;
 
-    @FindBy(css = "#app div.v-application--wrap div.locations-grid div:nth-of-type(2) div:nth-of-type(2) div:nth-of-type(3) div.accordion-panel header.panel-header a.panel-header-icon")
+    @FindBy(xpath = "//h1[normalize-space()='Competition Stats']")
     private WebElement competitionStats;
 
-    @FindBy(css = "#app div.v-application--wrap div.locations-grid div:nth-of-type(2) div:nth-of-type(2) div:nth-of-type(4) div.accordion-panel header.panel-header a.panel-header-icon")
+    @FindBy(xpath = "//h1[normalize-space()='Driver Market Stats']")
     private WebElement driverMarketStats;
 
-    @FindBy(css = "button.v-icon.notranslate.v-icon--link.material-icons.theme--light")
+    @FindBy(xpath = "//input[@id='input-376']")
     private WebElement clear;
 
 
