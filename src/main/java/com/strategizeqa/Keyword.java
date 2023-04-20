@@ -4,7 +4,6 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -18,6 +17,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.testng.Assert;
+import com.gargoylesoftware.htmlunit.ElementNotFoundException;
 
 public class Keyword {
 
@@ -47,6 +47,11 @@ public class Keyword {
 			ChromeOptions option = new ChromeOptions();
 			option.addArguments("--disable-notifications");
 			option.setExperimentalOption("excludeSwitches", new String[] { "enable-automation", "disable-infobars" });
+			option.setCapability("goog:chromeOptions", "--cdp-version=112");
+			option.setCapability("chrome.verbose", false);
+			option.setCapability("chrome.suppress_warnings", true);
+			option.addArguments("--disable-popup-blocking");
+
 			driver = new ChromeDriver(option);
 		} else if (browserName.equalsIgnoreCase("FireFox")) {
 			driver = new FirefoxDriver();
@@ -74,17 +79,32 @@ public class Keyword {
 		// driver.executeScript("window.scrollBy("+x+","+y+")"); // String Concatenation
 	}
 
-	// Fluent Wait
-	public static void waitForvisibilityOfElementLocated(By element) {
+	// Fluent Wait  Instead add Explicit wait.
+/*	public static void waitForvisibilityOfElementLocated(By element) {
 		// Applied Fluent Wait
 		FluentWait<WebDriver> wait = new FluentWait<>(driver);
-		wait.withTimeout(Duration.ofSeconds(60));
-		wait.pollingEvery(Duration.ofMillis(500));
-		wait.ignoring(NoSuchElementException.class);
-		// Wait Till the expected condition is present on the DOM
+		wait.withTimeout(Duration.ofSeconds(10));
+		wait.pollingEvery(Duration.ofMillis(100));
+		wait.ignoring(NoSuchElementException.class, 
+				ElementNotFoundException.class);
+		// Wait Till the expected condition is present on the DOM 
 		wait.until(ExpectedConditions.visibilityOfElementLocated(element));
 		wait.until(ExpectedConditions.presenceOfElementLocated(element));
-		wait.until(ExpectedConditions.elementToBeSelected(element));
+//		wait.until(ExpectedConditions.elementToBeSelected(element));
+		wait.until(ExpectedConditions.elementToBeClickable(element));
+
+	}
+*/
+	public static void fWaitForvisibilityOfElementLocated(WebElement element) {
+		FluentWait<WebDriver> wait = new FluentWait<>(driver);
+		wait.withTimeout(Duration.ofSeconds(10));
+		wait.pollingEvery(Duration.ofMillis(100));
+		wait.ignoring(NoSuchElementException.class, 
+				ElementNotFoundException.class);
+//		wait.until(ExpectedConditions.visibilityOfElementLocated(element));
+		wait.until(ExpectedConditions.visibilityOf(element));
+//		wait.until(ExpectedConditions.presenceOfElementLocated(element));
+		wait.until(ExpectedConditions.elementToBeClickable(element));
 
 	}
 	
@@ -242,7 +262,5 @@ public class Keyword {
 	public static Object getDriver() {
 		return null;
 	}
-
-
 
 }

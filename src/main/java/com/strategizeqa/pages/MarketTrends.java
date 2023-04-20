@@ -1,14 +1,9 @@
 package com.strategizeqa.pages;
 
-import java.util.List;
 import java.util.Map;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.Select;
-
 import com.strategizeqa.Keyword;
-
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -16,7 +11,7 @@ public class MarketTrends {
 	private Map<String, String> data;
 	private WebDriver driver;
 	private int timeout = 15;
-	
+
 	@FindBy(xpath = "//div[@class='md-theme-light']//child::a[1]")
 	private WebElement marketTrends;
 
@@ -35,19 +30,34 @@ public class MarketTrends {
 	@FindBy(css = "div.md-button-content > span:last-of-type")
 	private WebElement logout;
 
-	@FindBy(xpath = "//div[contains(@class,'driver-type')]")
-	private WebElement driverType;
+	@FindBy(xpath = "//div[@class='v-select__slot']")
+	private WebElement driverTypeList;
 
-	@FindBy(xpath = "//div[text()='Company Driver']")
-	private WebElement companyDriver;
+	@FindBy(xpath = "//div[contains(text(),'Overall']")
+	private WebElement driverTypeOverAll;
+
+	@FindBy(xpath = "//div[contains(text(),'Company Driver')]")
+	private WebElement driverTypeCompanyDriver;
 	
-	@FindBy(css = "#input-81")
-	private WebElement timeframe;
+	@FindBy(xpath = "(//div[contains(text(),'Owner Operator')]")
+	private WebElement driverTypeOwnerOperator;
+	
+	@FindBy(xpath = "//div[contains(text(),'Student')]")
+	private WebElement driverTypeStudent;
+	
+	@FindBy(xpath = "//div[contains(text(),'Team')]")
+	private WebElement driverTypeTeam;
+	
+	@FindBy(xpath = "//div[contains(text(),'Other')]")
+	private WebElement driverTypeOther;
+
+	@FindBy(xpath = "/html[1]/body[1]/div[1]/div[1]/div[1]/main[1]/div[2]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/input[1]")
+	private WebElement timeframeDropDown;
 
 	@FindBy(css = "button.green-button")
 	private WebElement runSearch;
 
-	@FindBy(css = "div#list-item-360.v-list-item.selectedOption > div.v-list-item__title")
+	@FindBy(xpath = "//div[contains(text(),'Prior 3 months')]")
 	private WebElement prior3months;
 
 	@FindBy(xpath = "//div[contains(text(),'Prior 6 months')]")
@@ -92,78 +102,88 @@ public class MarketTrends {
 		this(driver, data);
 		this.timeout = timeout;
 	}
-	
-	public MarketTrends clickLocationLink() {
+
+	public void clickLocationLink() {
 		locations.click();
-		return this;
-		
+
 	}
-	
-	public MarketTrends clickCompetitionLink() {
+
+	public void clickCompetitionLink() {
 		competition.click();
-		return this;
+
 	}
 
-	public MarketTrends clickHelpIconLink() {
+	public void clickHelpIconLink() {
 		helpIcon.click();
-		return this;
+
 	}
 
-	public MarketTrends clickMarketTrendsLink() {
+	public void clickMarketTrendsLink() {
+		Keyword.fWaitForvisibilityOfElementLocated(marketTrends);
 		marketTrends.click();
-		return this;
+	}
+
+	public void clickDriverTypeList() {
+		Keyword.fWaitForvisibilityOfElementLocated(driverTypeList);
+		driverTypeList.click();
+	}
+
+	public void clickOverall() {
+		Keyword.fWaitForvisibilityOfElementLocated(driverTypeOverAll);
+		driverTypeOverAll.click();
+	}
+
+	public void clickCompanyDriver() {
+		Keyword.fWaitForvisibilityOfElementLocated(driverTypeCompanyDriver);
+		driverTypeCompanyDriver.click();
 	}
 	
-	public MarketTrends clickCompanyDriverlink() {
-		companyDriver.click();
-		return this; 
-	}
-	
-	public MarketTrends clickDriverType() {
-		Keyword.wait(2000);
-		driverType.click();
-		return this;
-	}
-	
-	public void selectDropdownOptionByIndex(int index) {
-	    Select select = new Select(driverType);
-	    select.selectByIndex(index);
+	public void clickOwnerOperator() {
+		Keyword.fWaitForvisibilityOfElementLocated(driverTypeOwnerOperator);
+		driverTypeOwnerOperator.click();
 	}
 
 	
-	public String getSelectedDropdownValue() {
-	    Select select = new Select(driverType);
-	    return select.getFirstSelectedOption().getText();
+	public void clickStudent() {
+		Keyword.fWaitForvisibilityOfElementLocated(driverTypeStudent);
+		driverTypeStudent.click();
 	}
 	
-	public void selectDropdownOptionByVisibleText(String visibleText) {
-	    Select select = new Select(driverType);
-	    select.selectByVisibleText(visibleText);
+	public void clickTeam() {
+		Keyword.fWaitForvisibilityOfElementLocated(driverTypeTeam);
+		driverTypeTeam.click();
 	}
 	
+	public void clickOther() {
+		Keyword.fWaitForvisibilityOfElementLocated(driverTypeOther);
+		driverTypeOther.click();
+	}
+	
+	
+	public void clickTimeFrameDropDown() {
+		Keyword.fWaitForvisibilityOfElementLocated(timeframeDropDown);
 
-	public MarketTrends click3months() {
+		timeframeDropDown.click();
+	}
+
+	public void selectPrior3months() {
+		Keyword.fWaitForvisibilityOfElementLocated(prior3months);
 		prior3months.click();
-		return this;
-	}
-	
-	public MarketTrends click6months() {
-		prior6months.click();
-		return this;
-	}
-	
-	public MarketTrends click12months() {
-		prior12months.click();
-		return this;
 	}
 
-	public MarketTrends clickRunSearchButton() {
+	public void selectPrior6months() {
+		Keyword.fWaitForvisibilityOfElementLocated(prior6months);
+		prior6months.click();
+	}
+
+	public void selectPrior12months() {
+		Keyword.fWaitForvisibilityOfElementLocated(prior12months);
+		prior12months.click();
+	}
+
+	public void clickRunSearchButton() {
+		Keyword.fWaitForvisibilityOfElementLocated(runSearch);
 		runSearch.click();
-		return this;
 	}
-	
-	public MarketTrends verifyPageUrl() {
-		Keyword.getPageTitle();
-		return this;
-	}
+
 }

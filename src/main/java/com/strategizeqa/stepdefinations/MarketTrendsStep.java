@@ -1,9 +1,6 @@
 package com.strategizeqa.stepdefinations;
 
-
-import java.util.List;
-
-import org.openqa.selenium.WebElement;
+import org.testng.Assert;
 
 import com.strategizeqa.Keyword;
 import com.strategizeqa.pages.MarketTrends;
@@ -12,83 +9,76 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
-
 public class MarketTrendsStep {
-	
-	
-	
+
+	MarketTrends marketTrends = new MarketTrends();
+
 	@Given("I am on the market trends page")
 	public void marketTrendsPage() {
-		MarketTrends mt = new MarketTrends();
-		mt.clickMarketTrendsLink();
-		Keyword.wait(2000);
-	}
-	
-	@When("I set the driver type field to \"Overall\"")
-	public void driverType() {
-		MarketTrends mt = new MarketTrends();
-		Keyword.wait(3000);
-		mt.clickDriverType();
-		
-		//  mt.clickMarketTrendsLink() .clickDriverType()
-		  //.selectDropdownOptionByIndex(2); // select the 3rd option in the dropdown
-		 		
-		Keyword.wait(2000);
+		marketTrends.clickMarketTrendsLink();
 	}
 
-	
-	@And("I set the timeframe field to \"Prior 3 months\"")
+	@When("I click on DriverType drop down list")
+	public void driverTypeList() {
+		marketTrends.clickDriverTypeList();
+	}
+
+	@And("I select the driver type field as {string}")
+	public void drivertype(String driverType) {
+		if (driverType.equals("Overall")) {
+			marketTrends.clickOverall();
+		} else if (driverType.equals("Company Driver")) {
+			marketTrends.clickCompanyDriver();
+		} else if (driverType.equals("Owner Operator")) {
+			marketTrends.clickOwnerOperator();
+		} else if (driverType.equals("Student")) {
+			marketTrends.clickStudent();
+		} else if (driverType.equals("Team")) {
+			marketTrends.clickTeam();
+		} else if (driverType.equals("Other")) {
+			marketTrends.clickOther();
+		}
+
+//		marketTrends.clickOverall();
+	}
+
+	@Then("I click on TimeFrame DropDown")
+	public void selectTimeFrame() {
+		marketTrends.clickTimeFrameDropDown();
+
+	}
+
+	@And("I select the timeframe field to \"Prior 3 months\"")
 	public void timeFrame3months() {
-		MarketTrends mt = new MarketTrends();
-		Keyword.wait(2000);
-		mt.click3months();
-		Keyword.wait(1000);
-	}
-	
-	@And("I set the timeframe field to \"Prior 6 months\"")
-	public void timeFrame6months() {
-		MarketTrends mt = new MarketTrends();
-		mt.click6months();
-		Keyword.wait(1000);
-	}
-	
-	@And("I set the timeframe field to \"Prior 12 months\"")
-	public void timeFrame12months() {
-		MarketTrends mt = new MarketTrends();
-		mt.click12months();
-		Keyword.wait(1000);
-	}
-	
-	@Then("Click on RunSearch Button")
-	public void runSearch() throws InterruptedException {
-		MarketTrends mt = new MarketTrends();
-		mt.clickRunSearchButton();
-		Keyword.wait(1000);
+		marketTrends.selectPrior3months();
 	}
 
-	
+	@And("I select the timeframe field to \"Prior 6 months\"")
+	public void timeFrame6months() {
+		marketTrends.selectPrior6months();
+	}
+
+	@And("I select the timeframe field to \"Prior 12 months\"")
+	public void timeFrame12months() {
+		marketTrends.selectPrior12months();
+	}
+
+	@Then("Click on RunSearch Button")
+	public void runSearch() {
+		marketTrends.clickRunSearchButton();
+		Assert.assertEquals(Keyword.driver.getTitle(), "Stratas | Strategize");
+	}
+
 	@Then("Click on Location page")
 	public void clickonlocationpage() {
-		MarketTrends mt = new MarketTrends();
-		mt.clickLocationLink();
-		Keyword.wait(2000);
-		
+		marketTrends.clickLocationLink();
 	}
-	
+
 	@Then("Click on Competition Page")
 	public void clickonCompetitionpage() {
-		MarketTrends mt = new MarketTrends();
-		mt.clickCompetitionLink();
-		Keyword.wait(2000);
-		
-	}
-	
-	@Then("Get the page Title")
-	public void getpagetitle() {
-		MarketTrends mt = new MarketTrends();
-		mt.verifyPageUrl();
-	}
-	
+		marketTrends.clickCompetitionLink();
 
+	}
+	
 
 }
