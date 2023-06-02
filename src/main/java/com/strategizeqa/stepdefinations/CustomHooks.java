@@ -8,6 +8,7 @@ import com.strategizeqa.Keyword;
 import com.strategizeqa.base.Config;
 import com.strategizeqa.pages.LoginToApplication;
 import com.strategizeqa.utility.PropDemo;
+import com.strategizeqa.utility.PropUtil;
 
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
@@ -30,6 +31,7 @@ public class CustomHooks {
 
 	@After
 	public void tearDown() {
+		Keyword.wait(10000);
 	    Keyword.closeBrowser();
 	}
 

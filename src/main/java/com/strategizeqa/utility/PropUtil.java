@@ -8,7 +8,7 @@ import java.util.Properties;
 public class PropUtil {
 	
 	/**
-	 * This method will retrun the Locator value stroed in OR.propetries file.
+	 * This method will return the Locator value stored in OR.propetries file.
 	 * @param key
 	 * @return
 	 * @throws IOException
@@ -46,13 +46,15 @@ public class PropUtil {
 		 	
 	}
 	
+//	public String getLocator 
+	
 	public String getProperty(String file, String key) {
 		String value = "";
 		String base = System.getProperty("user.dir"); //Current working directory path 
 		//Code to read the property file, this will be asked in interview "How we read the property file"
 		FileInputStream fis = null;
 		try {
-			fis = new FileInputStream(base+"/"+file);	// Properties file reading code line no1
+			fis = new FileInputStream(base +"/"+file);	// Properties file reading code line no1
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} // properties path
@@ -76,7 +78,6 @@ public class PropUtil {
 		// Value reading
 		return value;
 		
-
 	}
 	
 }

@@ -3,6 +3,10 @@ package com.strategizeqa.pages;
 import java.util.Map;
 import org.openqa.selenium.support.CacheLookup;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+
+import com.strategizeqa.Keyword;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -32,6 +36,7 @@ public class QuestionMark {
     private WebElement whatCanWeHelpYouWith;
 
     public QuestionMark() {
+    	PageFactory.initElements(Keyword.driver, this);
     }
 
     public QuestionMark(WebDriver driver) {

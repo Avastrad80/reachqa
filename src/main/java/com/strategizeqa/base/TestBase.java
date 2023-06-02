@@ -1,11 +1,9 @@
 package com.strategizeqa.base;
 
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeMethod;
-
 import com.strategizeqa.Keyword;
 
 public class TestBase {
