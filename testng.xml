@@ -3,9 +3,8 @@
 <suite name="Suite">
   <test thread-count="5" name="Test">
     <classes>
-      <class name="com.Katampu22a.base.TestBase"/>
-      <class name="com.Katampu22a.HomePageTest"/>
-      <class name="com.Katampu22a.SearchCarFunctionality"/>
+      <class name="com.strategizeqa.base.TestBase"/>
+      <class name="com.strategizeqa.stepdefinations.CustomHooks"/>
     </classes>
   </test> <!-- Test -->
 </suite> <!-- Suite -->

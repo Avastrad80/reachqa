@@ -12,3 +12,8 @@ Feature: Validate prior 3 months functionality on Market Trends Page
     And I click on TimeFrame DropDown
     And I select the timeframe field to "Prior 6 months"
     Then Click on RunSearch Button
+    When I click on DriverType drop down list
+    And I select the driver type field as "Student"
+    And I click on TimeFrame DropDown
+    And I select the timeframe field to "Prior 12 months"
+    Then Click on RunSearch Button
