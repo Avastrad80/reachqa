@@ -1,20 +1,33 @@
 package com.strategizeqa.pages;
 
+import java.awt.AWTException;
+import java.awt.Robot;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import com.strategizeqa.Keyword;
-
+import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class CompetitionPage {
 
 	private Map<String, String> data;
 	private WebDriver driver;
-	//private int timeout = 15;
+	private JavascriptExecutor jsExecutor;
+	// private int timeout = 15;
+	private static final Logger LOG = Logger.getLogger(CompetitionPage.class);
 
 	/**
 	 * Navigate to Competition Page By making the variable private, it can only be
@@ -27,7 +40,7 @@ public class CompetitionPage {
 	 * @author Arun
 	 */
 
-	@FindBy(xpath = "//a[@id='competition']")
+	@FindBy(id = "competition")
 	private WebElement competition;
 
 	/**
@@ -35,7 +48,7 @@ public class CompetitionPage {
 	 * 
 	 * @author Arun
 	 */
-	@FindBy(xpath = "//label[text()='Prior 30 days']")
+	@FindBy(name = "Prior 30 days")
 	private WebElement prior30Days;
 
 	@FindBy(xpath = "//label[text()='Last Month']")
@@ -165,7 +178,7 @@ public class CompetitionPage {
 	@FindBy(xpath = "//label[text()='Doubles / Triples']")
 	private WebElement doublesTriples;
 
-	@FindBy(xpath = "//label[text()='Heavy Haul / Specialized']")
+	@FindBy(xpath = "//input[@name='Heavy Haul / Specialized']")
 	private WebElement heavyHaulSpecialized;
 
 	@FindBy(xpath = "//label[text()='Power Only']")
@@ -205,28 +218,36 @@ public class CompetitionPage {
 	 * 
 	 * @author Arun
 	 */
-	@FindBy(css = "div.location-search-radius p")
-	private WebElement clickOnSearchRadiusbutton;
+	@FindBy(css = "input[placeholder='Search']")
+	private WebElement locationInput;
 
-	@FindBy(xpath = "//input[@id='radius-input']")
+	@FindBy(css = "ul.suggestions")
+	private WebElement suggestionsDropdown;
+
+	@FindBy(id = "radius-input")
 	private WebElement clickOnRadiusSelectionText;
 
-	@FindBy(xpath = "//input[@placeholder='Search']")
+	@FindBy(css = "input[placeholder='Search']")
 	private WebElement radiusLocation;
-	
-	@FindBy(xpath="//i[@class='md-icon md-icon-font icon md-theme-light']")
+
+//	@FindBy(xpath="//i[@class='md-icon md-icon-font icon md-theme-light']")
+	@FindBy(xpath = "//i[text()='done']")
+//	@FindBy(css = "#top-button-bar button.md-button")
 	private WebElement radiusGreenCheck;
 	
-	@FindBy(xpath="//div[contains(text(),'Accept')]")
+    @FindBy(xpath = "//div[@class='info-editing-container']//h6[@data-v-71c40464]/b[@data-v-71c40464]")
+    private WebElement infoHeading;
+
+	@FindBy(xpath = "//div[text()='Accept']")
 	private WebElement buttonAccept;
-	
-	@FindBy(xpath="//i[normalize-space()='delete']")
+
+	@FindBy(xpath = "//i[normalize-space()='delete']")
 	private WebElement deleteRadiusLocation;
-	
-	@FindBy(xpath="//i[normalize-space()='edit']")
+
+	@FindBy(xpath = "//i[normalize-space()='edit']")
 	private WebElement radiusEdit;
-	
-	@FindBy(xpath="//i[normalize-space()='travel_explore']")
+
+	@FindBy(xpath = "//i[normalize-space()='travel_explore']")
 	private WebElement showOnMapRadius;
 
 	/**
@@ -239,16 +260,16 @@ public class CompetitionPage {
 	@FindBy(xpath = "//span[contains(text(),'Update Data')]")
 	private WebElement clickOnUpdateData;
 
-	@FindBy(xpath = "//input[@type='radio' and @value='Yearly']")
+	@FindBy(xpath = "//input[@value='Yearly']")
 	private WebElement wageTimeFrameYearly;
 
-	@FindBy(css = "#input-345[value='Weekly']")
+	@FindBy(xpath = "//input[@value='Weekly']")
 	private WebElement wageTimeFrameWeekly;
 
-	@FindBy(css = "#input-347[value='Hourly']")
+	@FindBy(xpath = "//input[@value='Hourly']")
 	private WebElement wageTimeFrameHourly;
 
-	@FindBy(css = "#input-349[value='CPM']")
+	@FindBy(xpath = "//div[@class='v-input v-input--is-label-active v-input--is-dirty theme--light v-input--selection-controls v-input--radio-group v-input--radio-group--row']//div[@class='v-input--selection-controls__ripple primary--text']")
 	private WebElement wageTimeFrameCPM;
 
 	/**
@@ -296,13 +317,10 @@ public class CompetitionPage {
 
 	@FindBy(xpath = "//div[@class='search-toolbar sidebar-container md-scrollbar']")
 	private WebElement filterElement;
-	
-    private void initializeElements() {
-        // Initialize the entirePageElement and filterElement elements
-        entirePage = driver.findElement(By.xpath("//div[@class='md-app-scroller md-layout-column md-flex md-theme-light md-scrollbar']"));
-        filterElement = driver.findElement(By.xpath("//div[@class='search-toolbar sidebar-container md-scrollbar']"));
-      
-    }
+
+	public void setJsExecutor(JavascriptExecutor jsExecutor) {
+		this.jsExecutor = jsExecutor;
+	}
 
 	/**
 	 * Initilize driver
@@ -314,9 +332,14 @@ public class CompetitionPage {
 
 	public CompetitionPage(WebDriver driver) {
 		this();
-		this.driver = driver;
-		initializeElements();
-		
+		this.driver = Keyword.driver;
+		 jsExecutor = Keyword.driver;
+		// Initialize the JavascriptExecutor
+		if (driver instanceof JavascriptExecutor) {
+            jsExecutor = (JavascriptExecutor) driver;
+        } else {
+            throw new IllegalStateException("This driver does not support Javascript execution.");
+        }
 	}
 
 	public CompetitionPage(WebDriver driver, Map<String, String> data) {
@@ -325,23 +348,8 @@ public class CompetitionPage {
 	}
 
 	/*
-	public CompetitionPage(WebDriver driver, Map<String, String> data, int timeout) {
-		this(driver, data);
-		this.timeout = timeout;
-	}
-    */
-
-    // Method for scrolling the window by x and y coordinates
-    public void scrollWindow(int x, int y) {
-        Keyword.scrollWindow(driver, x, y);
-    }
-
-    
-    // Method for scrolling the entire page and filter element by x and y coordinates
-    public void scrollWindow(WebElement entirePage, WebElement filterElement, int x, int y) {
-        Keyword.scrollWindow(driver, entirePage, filterElement, x, y);
-    }
-
+	 * public CompetitionPage(WebDriver driver, Map<String, String> data, int 
+	 */
 
 	/**
 	 * Navigate to Cometition Page Header.
@@ -349,7 +357,6 @@ public class CompetitionPage {
 	 * @return
 	 */
 	public void clickCompetitionLink() {
-//		Keyword.wait(10000);
 		Keyword.fWaitForvisibilityOfElementLocated(competition);
 		competition.click();
 	}
@@ -403,47 +410,85 @@ public class CompetitionPage {
 	public void clickSearchLocationButton() {
 		Keyword.fWaitForvisibilityOfElementLocated(locationSearchButton);
 		locationSearchButton.click();
+		Keyword.wait(5000);
 	}
 
 	public void clickUpdateSearchButton() {
 		Keyword.fWaitForvisibilityOfElementLocated(locationUpdateSearchButton);
 		locationUpdateSearchButton.click();
 	}
-	
+
 	/**
 	 * Radius Functionality
 	 */
-	
-	public void clickSearchByRadius() {
-		Keyword.wait(5000);
-		clickOnSearchRadiusbutton.click();
+
+	public void clickRadius() {
+		if (jsExecutor != null) {
+			jsExecutor.executeScript("let div_wrapper = document.getElementsByClassName('location-search-radius')[0];"
+					+ "let search_radius = div_wrapper.getElementsByTagName('p')[0];" + "search_radius.click();");
+		} else {
+			throw new IllegalStateException("Please check Exception");
+		}
 	}
-	
-	public void enterRadius() {
+
+	public void enterRadius(String radius) {
 		Keyword.fWaitForvisibilityOfElementLocated(clickOnRadiusSelectionText);
-		clickOnRadiusSelectionText.click();
+		clickOnRadiusSelectionText.sendKeys(Keys.CONTROL + "a");
+		clickOnRadiusSelectionText.sendKeys(Keys.DELETE);
+		clickOnRadiusSelectionText.sendKeys(radius);
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
-	
-	public void enterRadiusLocation() {
-		radiusLocation.click();
+
+	public void enterRadiusLocation(String locality) {
+		locationInput.sendKeys(locality);
 	}
-	
+
+	public void selectRadiusLocation(String locality, String province) {
+		Keyword.wait(5000);
+		String suggestionXPath = String.format(".//li/a/div/div[contains(., '%s') and contains(., '%s')]", locality,
+				province);
+		Keyword.wait(10000);
+		WebElement suggestionElement = suggestionsDropdown.findElement(By.xpath(suggestionXPath));
+		Keyword.wait(5000);
+		suggestionElement.click();
+	}
+
 	public void clickGreenCheckMark() {
+		Keyword.wait(5000);
 		radiusGreenCheck.click();
 	}
 	
+    public String getSelectedCountyText() {
+        return infoHeading.getText();
+    }
+
 	public void clickAcceptButton() {
+		Keyword.wait(5000);
 		buttonAccept.click();
 	}
-	
+
 	public void deleteRadiusLocation() {
 		deleteRadiusLocation.click();
 	}
-	
-	public void editRadius() {
+
+	public void editRadius(String radius) {
 		radiusEdit.click();
+		Keyword.fWaitForvisibilityOfElementLocated(radiusEdit);
+		radiusEdit.sendKeys(Keys.CONTROL + "a");
+		radiusEdit.sendKeys(Keys.DELETE);
+		radiusEdit.sendKeys(radius);
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+
+			e.printStackTrace();
+		}
 	}
-	
+
 	public void travelExplore() {
 		showOnMapRadius.click();
 	}
@@ -452,8 +497,6 @@ public class CompetitionPage {
 		Keyword.fWaitForvisibilityOfElementLocated(clickonstate);
 		clickonstate.click();
 	}
-	
-	
 
 	/**
 	 * Must Include Radio buttons to all elements Posting Driver Type
@@ -565,20 +608,67 @@ public class CompetitionPage {
 		clickOnXToClearFilter.click();
 	}
 
-	public void timeFrameYearly() {
-		wageTimeFrameYearly.click();
+	public void timeFrameYearly() throws AWTException {
+		Robot robot = new Robot();
+		robot.mouseWheel(1000);
+		Keyword.wait(5000);
+		JavascriptExecutor jsExecutor = (JavascriptExecutor) Keyword.driver;
+		if (jsExecutor != null) {
+			jsExecutor.executeScript("let xpath = \"//label[text()='Yearly']\";"
+					+ "let result = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);"
+					+ "let yearlyRadioButton = result.singleNodeValue;"
+					+ "if (yearlyRadioButton) { yearlyRadioButton.click(); }");
+		} else {
+			throw new IllegalStateException("JavascriptExecutor is not initialized");
+		}
 	}
 
-	public void timeFrameWeekly() {
-		wageTimeFrameWeekly.click();
+	public void timeFrameWeekly() throws AWTException {
+		Robot robot = new Robot();
+		robot.mouseWheel(1000);
+		Keyword.wait(5000);
+		JavascriptExecutor jsExecutor = (JavascriptExecutor) Keyword.driver;
+		if (jsExecutor != null) {
+			jsExecutor.executeScript("let xpath = \"//label[text()='Weekly']\";"
+					+ "let result = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);"
+					+ "let weeklyRadioButton = result.singleNodeValue;"
+					+ "if (weeklyRadioButton) { weeklyRadioButton.click(); }");
+		} else {
+			throw new IllegalStateException("JavascriptExecutor is not initialized");
+		}
+		Keyword.wait(5000);
 	}
 
-	public void timeFrameHourly() {
-		wageTimeFrameHourly.click();
+	public void timeFrameHourly() throws AWTException {
+		Robot robot = new Robot();
+		robot.mouseWheel(1000);
+		Keyword.wait(5000);
+		JavascriptExecutor jsExecutor = (JavascriptExecutor) Keyword.driver;
+		if (jsExecutor != null) {
+			jsExecutor.executeScript("let xpath = \"//label[text()='Hourly']\";"
+					+ "let result = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);"
+					+ "let hourlyRadioButton = result.singleNodeValue;"
+					+ "if (hourlyRadioButton) { hourlyRadioButton.click(); }");
+		} else {
+			throw new IllegalStateException("JavascriptExecutor is not initialized");
+		}
+		Keyword.wait(5000);
 	}
 
-	public void timeFrameCPM() {
-		wageTimeFrameCPM.click();
+	public void timeFrameCPM() throws AWTException {
+		Robot robot = new Robot();
+		robot.mouseWheel(1000);
+		Keyword.wait(5000);
+		JavascriptExecutor jsExecutor = (JavascriptExecutor) Keyword.driver;
+		if (jsExecutor != null) {
+			jsExecutor.executeScript("let xpath = \"//label[text()='CPM']\";"
+					+ "let result = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);"
+					+ "let cpmRadioButton = result.singleNodeValue;"
+					+ "if (cpmRadioButton) { cpmRadioButton.click(); }");
+		} else {
+			throw new IllegalStateException("JavascriptExecutor is not initialized");
+		}
+		Keyword.wait(5000);
 	}
 
 	public void sortCompanyNames() {
@@ -658,7 +748,6 @@ public class CompetitionPage {
 
 	public void enterLocation(String locality) throws InterruptedException {
 		Keyword.fWaitForvisibilityOfElementLocated(locationSearch);
-		Thread.sleep(5000);
 		locationSearch.sendKeys(locality);
 		Thread.sleep(10000);
 	}
@@ -714,102 +803,6 @@ public class CompetitionPage {
 		Thread.sleep(5000);
 	}
 
-	// CIty and Metropolitan Area
-	public void selectCityAndMetroPolitanArea(String locality, String province) throws InterruptedException {
-		List<WebElement> listOfLocat = Keyword.driver.findElements(By.xpath("//div[@role='list']/div[2]"));
-		for (int i = 1; i < listOfLocat.size(); i++) {
-			if ((Keyword.driver.findElement(
-					By.xpath("//div[@class='mx-auto location-options-submenu v-card v-sheet theme--light']/div[" + i
-							+ "]/div/div/div/div[1]"))
-					.getText().contains(locality))
-					&& (Keyword.driver.findElement(
-							By.xpath("//div[@class='mx-auto location-options-submenu v-card v-sheet theme--light']/div["
-									+ i + "]/div/div/div/div[2]"))
-							.getText().equals(province))) {
-//					System.out.println((Keyword.driver.findElement(By.xpath("//div[@class='mx-auto location-options-submenu v-card v-sheet theme--light']/div["+i+"]/div/div/div/div[1]")).getText() + 
-//							(Keyword.driver.findElement(By.xpath("//div[@class='mx-auto location-options-submenu v-card v-sheet theme--light']/div["+i+"]/div/div/div/div[2]")).getText())));
-				Keyword.driver.findElement(By.xpath(
-						"//div[@class='mx-auto location-options-submenu v-card v-sheet theme--light']/div[\" + i + \"]/div/div[1]/div/div[2]"))
-						.click();
-				break;
-			}
-		}
-		Thread.sleep(5000);
-	}
-
-	// City and State
-	public void selectCityAndState(String locality, String province) throws InterruptedException {
-		List<WebElement> listOfLocat = Keyword.driver.findElements(By.xpath("//div[@role='list']/div[2]"));
-		for (int i = 1; i < listOfLocat.size(); i++) {
-			if ((Keyword.driver.findElement(
-					By.xpath("//div[@class='mx-auto location-options-submenu v-card v-sheet theme--light']/div[" + i
-							+ "]/div/div[2]/div/div[1]"))
-					.getText().contains(locality))
-					&& (Keyword.driver.findElement(
-							By.xpath("//div[@class='mx-auto location-options-submenu v-card v-sheet theme--light']/div["
-									+ i + "]/div/div/div/div[2]"))
-							.getText().equals(province))) {
-//					System.out.println((Keyword.driver.findElement(By.xpath("//div[@class='mx-auto location-options-submenu v-card v-sheet theme--light']/div["+i+"]/div/div/div/div[1]")).getText() + 
-//							(Keyword.driver.findElement(By.xpath("//div[@class='mx-auto location-options-submenu v-card v-sheet theme--light']/div["+i+"]/div/div/div/div[2]")).getText())));
-				Keyword.driver.findElement(
-						By.xpath("//div[@class='mx-auto location-options-submenu v-card v-sheet theme--light']/div[" + i
-								+ "]/div/div[2]/div/div[1]"))
-						.click();
-				break;
-			}
-		}
-		Thread.sleep(5000);
-	}
-
-	//City and county
-	public void selectCityAndCounty(String locality, String province) throws InterruptedException {
-		List<WebElement> listOfLocat = Keyword.driver.findElements(By.xpath("//div[@role='list']/div[2]"));
-		for (int i = 1; i < listOfLocat.size(); i++) {
-			if ((Keyword.driver.findElement(
-					By.xpath("//div[@class='mx-auto location-options-submenu v-card v-sheet theme--light']/div[" + i
-							+ "]/div/div[3]/div/div[1]"))
-					.getText().contains(locality))
-					&& (Keyword.driver.findElement(
-							By.xpath("//div[@class='mx-auto location-options-submenu v-card v-sheet theme--light']/div["
-									+ i + "]/div/div[3]/div/div[2]"))
-							.getText().equals(province))) {
-//					System.out.println((Keyword.driver.findElement(By.xpath("//div[@class='mx-auto location-options-submenu v-card v-sheet theme--light']/div["+i+"]/div/div/div/div[1]")).getText() + 
-//							(Keyword.driver.findElement(By.xpath("//div[@class='mx-auto location-options-submenu v-card v-sheet theme--light']/div["+i+"]/div/div/div/div[2]")).getText())));
-				Keyword.driver.findElement(
-						By.xpath("//div[@class='mx-auto location-options-submenu v-card v-sheet theme--light']/div[" + i
-								+ "]/div/div[3]/div/div[1]"))
-						.click();
-				break;
-			}
-		}
-		Thread.sleep(5000);
-	}
-
-	//City and Metropolitan Area
-	public void selectCityAndMetroPolitanArea(String locality, String city, String metropolitanarea)
-			throws InterruptedException {
-		List<WebElement> listOfLocat = Keyword.driver.findElements(By.xpath("//div[@role='list']/div[2]"));
-		for (int i = 1; i < listOfLocat.size(); i++) {
-			if ((Keyword.driver.findElement(
-					By.xpath("//div[@class='mx-auto location-options-submenu v-card v-sheet theme--light']/div[" + i
-							+ "]/div/div/div/div[1]"))
-					.getText().contains(locality))
-					&& (Keyword.driver.findElement(
-							By.xpath("//div[@class='mx-auto location-options-submenu v-card v-sheet theme--light']/div["
-									+ i + "]/div/div/div/div[2]"))
-							.getText().equals(city))) {
-//					System.out.println((Keyword.driver.findElement(By.xpath("//div[@class='mx-auto location-options-submenu v-card v-sheet theme--light']/div["+i+"]/div/div/div/div[1]")).getText() + 
-//							(Keyword.driver.findElement(By.xpath("//div[@class='mx-auto location-options-submenu v-card v-sheet theme--light']/div["+i+"]/div/div/div/div[2]")).getText())));
-				Keyword.driver.findElement(
-						By.xpath("//div[@class='mx-auto location-options-submenu v-card v-sheet theme--light']/div[" + i
-								+ "]/div/div/div/div[1]"))
-						.click();
-				break;
-			}
-		}
-		Thread.sleep(5000);
-	}
-
 	public void click() {
 		locationSearch.click();
 	}
@@ -838,4 +831,32 @@ public class CompetitionPage {
 		}
 		dateRangeOption.click();
 	}
+
+	public static void screenshot(String filePath, int scenarioNumber) {
+		// Capture the entire page screenshot
+		Keyword.wait(10000);
+		File srcFile = ((TakesScreenshot) Keyword.driver).getScreenshotAs(OutputType.FILE);
+		try {
+			// Create the file name using the scenario number and timestamp
+			SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMyyyy_HHmm");
+			String timestamp = dateFormat.format(new Date());
+			String screenshotPath = "C:\\Users\\Arun\\Downloads\\ScreenShot\\Strategize_QA\\";
+			String fileName = screenshotPath + "Scenario_" + scenarioNumber + "_" + timestamp + ".png";
+			FileUtils.copyFile(srcFile, new File(fileName));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void scrollWindow(WebDriver driver, int x, int y) {
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("window.scrollBy(" + x + ", " + y + ");");
+	}
+
+	public static void scrollAndClick(WebDriver driver, WebElement element) {
+		JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
+		jsExecutor.executeScript("arguments[0].scrollIntoView(true);", element);
+		jsExecutor.executeScript("arguments[0].click();", element);
+	}
+
 }

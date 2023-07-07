@@ -1,17 +1,19 @@
 Feature: Filter competition postings
 
-  Scenario: 8. Filter competition postings based on driver type, position, and location radius
+Scenario: 21. Filter competition postings based on driver type, position, and location radius
     Given I am on the competition page
-    And I select Posting Driver Type as Student Driver
     Then I click on Solo Team Header
     And I select Solo or Team Position as Team
+    Then I clear by defualt filter Last Month
     And I click on the search by radius
-    And I enter the radius 50 miles
+    Then I enter the radius "100" miles
     When I enter in radius location as "<locality>" in location input box
-    And I select radius "<locality>" and "<province>"
+    And I select radius "<locality>" location and "<province>"
     And I click the green check mark
+    Then I verify that at least one county is selected
     And I click the accept button
     Then I click on Search Button
-   	Examples: 
+    Then I take a screenshot for Scenario 21
+            Examples: 
       | locality | province |
-      | Texas    | state    |
+      | California  | United States |

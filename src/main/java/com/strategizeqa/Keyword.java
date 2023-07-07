@@ -1,12 +1,19 @@
 package com.strategizeqa;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.text.SimpleDateFormat;
+import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -64,7 +71,7 @@ public class Keyword {
 		}
 		driver.manage().window().maximize();
 		return driver;
-		
+
 	}
 
 	// Launch URL
@@ -76,25 +83,24 @@ public class Keyword {
 	public static String getPageTitle() {
 		return driver.getTitle();
 	}
-	
 
+	// Method for scrolling the window by x and y coordinates
+	public static void scrollWindow(WebDriver driver, int x, int y) {
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("window.scrollBy(" + x + ", " + y + ");");
+	}
 
-    // Method for scrolling the window by x and y coordinates
-    public static void scrollWindow(WebDriver driver, int x, int y) {
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        js.executeScript("window.scrollBy(" + x + ", " + y + ");");
-    }
+	// Method for scrolling the entire page and filter element by x and y
+	// coordinates
+	public static void scrollWindow(WebDriver driver, WebElement entirePage, WebElement filterElement, int x, int y) {
+		// Scroll to the entire page first
+		scrollWindow(driver, x, y);
 
-    // Method for scrolling the entire page and filter element by x and y coordinates
-    public static void scrollWindow(WebDriver driver, WebElement entirePage, WebElement filterElement, int x, int y) {
-        // Scroll to the entire page first
-        scrollWindow(driver, x, y);
-
-        // Scroll to the filter element
-        Actions actions = new Actions(driver);
-        actions.moveToElement(entirePage).moveToElement(filterElement).click().build().perform();
-        scrollWindow(driver, x, y);
-    }
+		// Scroll to the filter element
+		Actions actions = new Actions(driver);
+		actions.moveToElement(entirePage).moveToElement(filterElement).click().build().perform();
+		scrollWindow(driver, x, y);
+	}
 
 	public static void fWaitForvisibilityOfElementLocated(WebElement element) {
 		FluentWait<WebDriver> wait = new FluentWait<>(driver);
@@ -108,15 +114,21 @@ public class Keyword {
 		System.out.println();
 
 	}
-	
-	
-	
+
+//	public static void fWaitForvisibilityOfElementLocated(WebElement element, int maxWaitSeconds) {
+//	    FluentWait<WebDriver> wait = new FluentWait<>(driver);
+//	    wait.withTimeout(Duration.ofSeconds(maxWaitSeconds));
+//	    wait.pollingEvery(Duration.ofMillis(100));
+//	    wait.until(ExpectedConditions.visibilityOf(element));
+//	    wait.until(ExpectedConditions.elementToBeClickable(element));
+//	}
+
 	public static void wait(int milliseconds) {
-	    try {
-	        Thread.sleep(milliseconds);
-	    } catch (InterruptedException e) {
-	        e.printStackTrace();
-	    }
+		try {
+			Thread.sleep(milliseconds);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	// To click on web element
@@ -149,6 +161,22 @@ public class Keyword {
 		} else {
 			return driver.findElement(By.id("123"));
 		}
+	}
+
+	public static void screenshot(String filePath) {
+	    // Capture the entire page screenshot
+	    File srcFile = ((TakesScreenshot) Keyword.driver).getScreenshotAs(OutputType.FILE);
+
+	    try {
+	        // Create the file name using the scenario number and timestamp
+	        SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMyyyy_HHmm");
+	        String timestamp = dateFormat.format(new Date());
+	        String screenshotPath = "C:\\Users\\Arun\\Downloads\\ScreenShot\\";
+	        String fileName = screenshotPath + "Testing_Locators" + "_" + timestamp + ".png";
+	        FileUtils.copyFile(srcFile, new File(fileName));
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
 	}
 
 	// Close Browser
@@ -211,27 +239,27 @@ public class Keyword {
 	}
 
 	// Get web elements
-	 public static List<WebElement> getWebElements(String locatorType, String locatorValue) {
-	        if (locatorType.equalsIgnoreCase("id")) {
-	            return driver.findElements(By.id(locatorValue));
-	        } else if (locatorType.equalsIgnoreCase("name")) {
-	            return driver.findElements(By.name(locatorValue));
-	        } else if (locatorType.equalsIgnoreCase("xpath")) {
-	            return driver.findElements(By.xpath(locatorValue));
-	        } else if (locatorType.equalsIgnoreCase("cssSelector")) {
-	            return driver.findElements(By.cssSelector(locatorValue));
-	        } else if (locatorType.equalsIgnoreCase("linkText")) {
-	            return driver.findElements(By.linkText(locatorValue));
-	        } else if (locatorType.equalsIgnoreCase("partialLinkText")) {
-	            return driver.findElements(By.partialLinkText(locatorValue));
-	        } else if (locatorType.equalsIgnoreCase("tagName")) {
-	            return driver.findElements(By.tagName(locatorValue));
-	        } else if (locatorType.equalsIgnoreCase("className")) {
-	            return driver.findElements(By.className(locatorValue));
-	        } else {
-	            throw new NoSuchElementException("Invalid locator type: " + locatorType);
-	        }
-	    }
+	public static List<WebElement> getWebElements(String locatorType, String locatorValue) {
+		if (locatorType.equalsIgnoreCase("id")) {
+			return driver.findElements(By.id(locatorValue));
+		} else if (locatorType.equalsIgnoreCase("name")) {
+			return driver.findElements(By.name(locatorValue));
+		} else if (locatorType.equalsIgnoreCase("xpath")) {
+			return driver.findElements(By.xpath(locatorValue));
+		} else if (locatorType.equalsIgnoreCase("cssSelector")) {
+			return driver.findElements(By.cssSelector(locatorValue));
+		} else if (locatorType.equalsIgnoreCase("linkText")) {
+			return driver.findElements(By.linkText(locatorValue));
+		} else if (locatorType.equalsIgnoreCase("partialLinkText")) {
+			return driver.findElements(By.partialLinkText(locatorValue));
+		} else if (locatorType.equalsIgnoreCase("tagName")) {
+			return driver.findElements(By.tagName(locatorValue));
+		} else if (locatorType.equalsIgnoreCase("className")) {
+			return driver.findElements(By.className(locatorValue));
+		} else {
+			throw new NoSuchElementException("Invalid locator type: " + locatorType);
+		}
+	}
 
 	public static List<String> getTextFromListOfElements(String locatorType, String locatorValue) {
 		List<WebElement> elements = getWebElements(locatorType, locatorValue);
@@ -266,8 +294,8 @@ public class Keyword {
 		Assert.assertEquals(actual, expectedTitle);
 	}
 
-	public static Object getDriver() {
-		return null;
-	}
+//	public static Object getDriver() {
+//		return null;
+//	}
 
 }
